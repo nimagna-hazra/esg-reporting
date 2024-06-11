@@ -14,21 +14,9 @@ server = app.server
 PATH = pathlib.Path(__file__).parent
 DATA_PATH = PATH.joinpath("data").resolve()
 
-#df = pd.read_csv(DATA_PATH.joinpath("2014_apple_stock.csv"))
-
 df=pd.read_excel(DATA_PATH.joinpath('2024.02.28_Updated Transp. Index 2023.xlsx'),sheet_name='Full Dataset_Board', nrows=500)
 dfnz2 = pd.read_excel(DATA_PATH.joinpath('2024.04.04-NZ_not full QC_ Consumer Staples.xlsx'),sheet_name='Dissertation Net Zero & Governa', nrows=496)
 dfpivot = pd.read_csv(DATA_PATH.joinpath('Pivoted_master_data.csv'))
-
-#df2 = pd.read_csv('2024.04.04_Consumer Staples NZ QCd.csv')
-
-#data2=data[data['Date Local'].str.slice(0,4).astype(int) >= 2006]
-
-#app = Dash(__name__)
-# app.layout = dbc.Container(
-#     dbc.Alert("Hello Bootstrap!", color="success"),
-#     className="p-5",
-# )
 
 def company_list(sector):
     dfcs = df.loc[df['GICS.Sector'] == sector,['Company.Name','CM7a.GHG.Emissions.','CM7b.GHG.Emissions.'
@@ -102,9 +90,9 @@ def tghg1(sector,company_list):
     tghg1_sel10 = tghg1[masknz1].sort_values(by='Total GHG1', axis=0, ascending=False)
     tghg1_sel10['Total GHG1'] = tghg1_sel10['Total GHG1']/1000
     
-    fig22 = px.bar(tghg1_sel10, x='Company', y='Total GHG1',text='Total GHG1',color_discrete_sequence=['#2774AE'],height = 780)
+    fig22 = px.bar(tghg1_sel10, x='Company', y='Total GHG1', text='Total GHG1', color_discrete_sequence=['#2774AE'], height = 780)
     fig22.update_layout(plot_bgcolor="white", font_family='Helvetica',
-                        title_font_family="Helvetica",font=dict(size=22))
+                        title_font_family="Helvetica",font=dict(size=180/tghg1_sel10.shape[0]))
     fig22.update_xaxes(title=None)
     fig22.update_yaxes(title=None)
     fig22.update_layout(
@@ -142,7 +130,7 @@ def nghg1(sector,company_list):
 
     
     fig2 = px.bar(tnghg1_merged, x='Company', y='Normalised GHG1',text='Normalised GHG1 Rounded',color_discrete_sequence=['#2774AE'],height = 780)
-    fig2.update_layout(plot_bgcolor="white", font_family='Helvetica', title_font_family="Helvetica",font=dict(size=22))
+    fig2.update_layout(plot_bgcolor="white", font_family='Helvetica', title_font_family="Helvetica",font=dict(size=180/tnghg1_merged.shape[0]))
     fig2.update_xaxes(title=None)
     fig2.update_yaxes(title=None)
     fig2.update_layout(
@@ -186,7 +174,7 @@ def tghg2(sector,company_list):
               color_discrete_sequence=['#F47C30','#2774AE','#FFB81C'],height = 780)
 #fig2 = px.bar(dfghg1_sorted, x='CompanyName', y='Value',text='value_rounded',color_discrete_sequence=['#2774AE'])
     fig32.update_layout(plot_bgcolor="white", font_family='Helvetica', title_font_family="Helvetica",
-                  font=dict(size=22), uniformtext_mode='hide',
+                  font=dict(size=540/tghg2_melted.shape[0]), uniformtext_mode='hide',
                   legend=dict(
                       yanchor="top",
                       y=0.99,
@@ -249,7 +237,7 @@ def nghg2(sector,company_list):
     fig322 = px.bar(tnghg2_melted, x="Company", y="value",
                     color="Scope 2 Category", barmode="group",text='value_rounded',color_discrete_sequence=['#F47C30','#2774AE','#FFB81C'],height = 780)
     fig322.update_layout(plot_bgcolor="white", font_family='Helvetica', title_font_family="Helvetica",
-                  font=dict(size=22), uniformtext_mode='hide',
+                  font=dict(size=540/tnghg2_melted.shape[0]), uniformtext_mode='hide',
                   legend=dict(
                       yanchor="top",
                       y=0.99,
@@ -376,7 +364,8 @@ def tnghg3(sector,company_list,k1):
     tnghg33_merged = tnghg33_merged.sort_values(by=[k1,'Company'], axis = 0, ascending=False)
     
     fig2 = px.bar(tnghg33_merged, x='Modified Labels', y=k1,text=k2 ,color_discrete_sequence=['#2774AE'], height = 1000)
-    fig2.update_layout(plot_bgcolor="white", font_family='Helvetica', title_font_family="Helvetica",font=dict(size=18))
+    
+    fig2.update_layout(plot_bgcolor="white", font_family='Helvetica', title_font_family="Helvetica",font=dict(size=180/tnghg33_merged.shape[0]))
     fig2.update_xaxes(title=None)
     fig2.update_yaxes(title=None)
     fig2.update_layout(
@@ -408,7 +397,7 @@ def water_util(sector,company_list):
     dfwwc_prev10 = dfwwc[mask12].sort_values(by='Value', axis=0, ascending=False)
     
     fig8 = px.bar(dfwwc_prev10, x='CompanyName', y='Value',color='Cleaned_names',text='value_rounded',color_discrete_sequence=['#2774AE','#F47C30'],height = 780, barmode='group')
-    fig8.update_layout(plot_bgcolor="white", font_family='Helvetica', title_font_family="Helvetica",font=dict(size=22),
+    fig8.update_layout(plot_bgcolor="white", font_family='Helvetica', title_font_family="Helvetica",font=dict(size=360/dfwwc_prev10.shape[0]),
                   legend=dict(
                       yanchor="top",
                       y=0.99,
@@ -443,7 +432,7 @@ def biodiver(sector,company_list):
     fig7 = px.bar(dfbi_prev10, x="CompanyName", y="Value",text='value_rounded',
               color_discrete_sequence=['#2774AE','#FFB81C','#F47C30'],barmode="group", height = 780)
     fig7.update_layout(plot_bgcolor="white", font_family='Helvetica', title_font_family="Helvetica",
-                  font=dict(size=22))
+                  font=dict(size=180/dfbi_prev10.shape[0]))
 
 
     fig7.update_xaxes(title=None)
@@ -491,9 +480,9 @@ def enviromentalgovernacemetrics(sector,company_list):
     
     fig = px.scatter(emg_melted, y="Company", x="Metric", color="Status",
                  color_discrete_sequence=['#4E7E6B','#F43A00','#FFD100','#2774AE'],height = 920, 
-                 title='Environmental Metrics Governance: Consumer Staples')
+                 title='Environmental Metrics Governance')
     fig.update_traces(marker_size=34)
-    fig.update_layout(plot_bgcolor="white", font=dict(family="Verdana",size=19), title_font_family="Helvetica", title_x=0.5,
+    fig.update_layout(plot_bgcolor="white", font=dict(family="Verdana",size=17), title_font_family="Helvetica", title_x=0.5,
                  legend=dict( yanchor="bottom",orientation="h",  xanchor="right", x=1, title=None),
                  margin=dict(t=190),title_font_size=30,xaxis_tickformat='wrap',
                  xaxis=dict(side="top",categoryorder='array', categoryarray= emg_melted["Company"].unique()))
@@ -547,7 +536,7 @@ def tcfdpercentage(sector,company_list):
     wrapped_labels = [label.replace(' ', '<br>').replace('-', '<br>') for label in tcfd['Company'].unique().tolist()]
     fig7.update_xaxes(tickmode='array', tickvals=list(range(len(tcfd['Company'].unique().tolist()))), ticktext=wrapped_labels)
 
-    fig7.update_layout(height = 780,font_family='Helvetica', title_font_family="Helvetica",font=dict(size=22))
+    fig7.update_layout(height = 780,font_family='Helvetica', title_font_family="Helvetica",font=dict(size=180/tcfd.shape[0]))
     
     return fig7
 
@@ -580,7 +569,7 @@ def boardmember(sector,company_list):
     wrapped_labels = [label.replace(' ', '<br>').replace('-', '<br>') for label in pobm['Company'].unique().tolist()]
     fig8.update_xaxes(tickmode='array', tickvals=list(range(len(pobm['Company'].unique().tolist()))), ticktext=wrapped_labels)
 
-    fig8.update_layout(height = 780,font_family='Helvetica', title_font_family="Helvetica",font=dict(size=22))
+    fig8.update_layout(height = 780,font_family='Helvetica', title_font_family="Helvetica",font=dict(size=180/pobm.shape[0]))
     
     return fig8
 
@@ -628,7 +617,7 @@ def environmentalgoals(sector,company_list):
                  color_discrete_sequence=['#4E7E6B','#F43A00','#313339','#2774AE','#FFD100'],height = 920, 
                  title='Environmental Goals: Consumer Staples')
     fig9.update_traces(marker_size=34)
-    fig9.update_layout(plot_bgcolor="white", font=dict(family="Verdana",size=19), title_font_family="Helvetica", title_x=0.5,
+    fig9.update_layout(plot_bgcolor="white", font=dict(family="Verdana",size=12), title_font_family="Helvetica", title_x=0.5,
                  legend=dict( yanchor="bottom",orientation="h",  xanchor="right", x=1, title=None),
                  margin=dict(t=190),title_font_size=30,xaxis_tickformat='wrap',
                  xaxis=dict(side="top",categoryorder='array', categoryarray= column_order))
@@ -636,7 +625,10 @@ def environmentalgoals(sector,company_list):
     fig9.update_xaxes(title=None, tickformat='wrap')
 
     max_label_length = 20
-    wrapped_labels = [label[:[m.start() for m in re.finditer(r' ', label)][3]] + '<br>' + label[[m.start() for m in re.finditer(r' ', label)][3]:] if label.find(' ')>0 else label for label in column_order]
+    wrapped_labels = [label[:[m.start() for m in re.finditer(r' ', label)][1]] + '<br>' + label[[m.start() for m in re.finditer(r' ', label)][1]:] if label.find(' ')>0 else label for label in column_order]
+    wrapped_labels = [label[:[m.start() for m in re.finditer(r' ', label)][3]] + '<br>' + label[[m.start() for m in re.finditer(r' ', label)][3]:] if label.find(' ')>0 else label for label in wrapped_labels]
+    q = wrapped_labels[6]
+    wrapped_labels[6] = [q[:[m.start() for m in re.finditer(r' ', q)][6]] + '<br>' + q[[m.start() for m in re.finditer(r' ', q)][6]:]]
     p = wrapped_labels[7]
     wrapped_labels[7] = [p[:[m.start() for m in re.finditer(r' ', p)][5]] + '<br>' + p[[m.start() for m in re.finditer(r' ', p)][5]:]]
 # p = wrapped_labels[7]
